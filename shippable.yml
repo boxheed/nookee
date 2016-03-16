@@ -5,7 +5,7 @@ jdk:
 
 
 # specify the build_image
-build_image: shippableimages/ubuntu1404_java
+# build_image: shippableimages/ubuntu1404_java
 
 before_install:
 
@@ -23,8 +23,9 @@ before_script:
   - git remote set-url origin git@github.com:$REPO_NAME.git
   - mkdir $HOME/.gradle; printenv | grep GRADLE_PROP | cut -d'=' -f 2- >> $HOME/.gradle/gradle.properties
 
-ci:
-  - ./gradlew clean build
+buil:
+  ci:
+    - ./gradlew clean build
 
 after_script:
   - cp -R ./build/test-results/* ./shippable/testresults
