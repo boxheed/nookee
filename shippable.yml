@@ -5,7 +5,7 @@ jdk:
 
 
 # specify the build_image
-build_image: shippableimages/ubuntu1404_java
+# build_image: shippableimages/ubuntu1404_java
 
 before_install:
 
