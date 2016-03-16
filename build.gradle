@@ -44,12 +44,12 @@ dependencies {
 //	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
 	compile group: 'commons-io', name: 'commons-io', version:'2.4'
-	
+
 	compile 'org.jruby:jruby-complete:9.0.5.0'
 	compile 'org.codehaus.groovy:groovy-all:2.4.6'
 	compile 'org.python:jython:2.7.0'
-	
-	
+
+
 
 
 	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
@@ -70,8 +70,8 @@ ospackage {
   	release = 1
   	arch = NOARCH
   	os = LINUX
-  	user = nookee
-  	group = nookee
+  	user = archivesBaseName
+  	group = archivesBaseName
 
   	into installPath
 
@@ -82,9 +82,8 @@ ospackage {
     link(initPath, jarPath)
 
   }
- 
+
  task distRpm(type: Rpm, dependsOn: bootRepackage) {
 
   }
   build.dependsOn distRpm
- 
