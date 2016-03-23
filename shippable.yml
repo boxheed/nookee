@@ -5,7 +5,7 @@ jdk:
 
 
 # specify the build_image
-build_image: shippableimages/ubuntu1404_java
+#build_image: shippableimages/ubuntu1404_java
 
 before_install:
 
@@ -24,7 +24,12 @@ before_script:
   - mkdir $HOME/.gradle; printenv | grep GRADLE_PROP | cut -d'=' -f 2- >> $HOME/.gradle/gradle.properties
 
 script:
-    - ./gradlew clean build
+  - ./gradlew clean build
+  - cp -R ./build/libs/*.jar ./shippable/artifacts
+  - cp -R ./build/distributions/* ./shippable/artifacts
+  - ls ./shippable/artifacts
+
+
 
 before_archive:
 #  - cp -R ./build/test-results/* ./shippable/testresults
