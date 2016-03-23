@@ -26,13 +26,17 @@ before_script:
 script:
     - ./gradlew clean build
 
-after_script:
+before_archive:
 #  - cp -R ./build/test-results/* ./shippable/testresults
 #  - cp -R ./build/reports/cobertura/*.xml ./shippable/codecoverage
   - cp -R ./build/libs/*.jar ./shippable/artifacts
   - cp -R ./build/distributions/* ./shippable/artifacts
 
-archive: true
+after_archive:
+  # To get the URL of the api access token
+  - echo $SHIPPABLE_ARTIFACTS_URL
+  # value of the below variable will be true if archive is successful else it will be false.
+  - echo $ARTIFACTS_UPLOAD_SUCCESSFUL
 
 #environment
 env:
