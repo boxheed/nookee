@@ -23,8 +23,7 @@ before_script:
   - git remote set-url origin git@github.com:$REPO_NAME.git
   - mkdir $HOME/.gradle; printenv | grep GRADLE_PROP | cut -d'=' -f 2- >> $HOME/.gradle/gradle.properties
 
-buil:
-  ci:
+script:
     - ./gradlew clean build
 
 after_script:
