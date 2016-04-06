@@ -82,4 +82,22 @@ ospackage {
 
 task distRpm(type: Rpm, dependsOn: bootRepackage) {}
 
-build.dependsOn distRpm
+assemble.dependsOn distRpm
+
+publishing {
+    publications {
+        mavenRpm(MavenPublication) {
+            artifact buildRpm
+        }
+    }
+}
+
+bintray {
+	dryRun = false
+	publish = true
+	publications = ['mavenJava', 'mavenRpm']
+	pkg {
+		labels = ['gradle', 'opinion', 'gradle-pater-build-plugin', 'java']
+		repo = 'maven'
+	}
+}
