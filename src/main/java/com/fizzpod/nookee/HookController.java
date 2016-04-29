@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,9 +58,10 @@ public class HookController {
 	}
 
 	@RequestMapping(path = "/**", method = RequestMethod.POST)
-	public ResponseEntity<?> doHook(HttpServletRequest request) {
+	public ResponseEntity<?> doHook(@RequestBody String message, HttpServletRequest request) {
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-		Object response = invokeHook(path, new Object());
+		LOGGER.debug("Received request at {} with message {}", path, message);
+		Object response = invokeHook(path, message);
 		ResponseEntity<?> entity = new ResponseEntity<>(HttpStatus.OK);
 		if(response != null) {
 			entity = new ResponseEntity<>(response, HttpStatus.OK);
@@ -67,7 +69,7 @@ public class HookController {
 		return entity;
 	}
 
-	private Object invokeHook(String path, Object request) {
+	private Object invokeHook(String path, String message) {
 		Object result = null;
 		File hookFolder = resolveHookFolder(path);
 		if (hookFolder != null && hookFolder.exists() && hookFolder.isDirectory()) {
@@ -78,7 +80,8 @@ public class HookController {
 						String script;
 						try {
 							script = FileUtils.readFileToString(hook, "UTF-8");
-							engine.put("request", "Apple");
+							engine.put("request", message);
+							LOGGER.debug("Invoking script {}", script);
 							result = engine.eval(script);
 						} catch (IOException e) {
 							LOGGER.warn("Could not read script file {}", hook.getName());
