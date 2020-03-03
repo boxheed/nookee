@@ -94,7 +94,7 @@ publishing {
 bintray {
 	dryRun = false
 	publish = true
-	publications = ['mavenJava', 'mavenRpm']
+	publications = ['mavenJava']
 	pkg {
 		labels = ['nookee', 'java']
 		repo = 'maven'
