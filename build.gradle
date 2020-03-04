@@ -85,16 +85,31 @@ assemble.dependsOn distRpm
 
 publishing {
     publications {
-        mavenRpm(MavenPublication) {
-            artifact buildRpm
-        }
+        mavenJava(MavenPublication) {
+			from components.java
+			artifactId = jar.archiveBaseName
+		}
     }
 }
 */
+
+publish {
+    dependsOn assemble
+} 
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+      artifactId bootJar.baseName
+    }
+  }
+}
+
 bintray {
 	dryRun = false
 	publish = true
-	publications = ['mavenJava']
+	publications = ['bootJava']
 	pkg {
 		labels = ['nookee', 'java']
 		repo = 'maven'
