@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 
 @RestController
-@RequestMapping("/hooks")
+@RequestMapping("/apis")
 public class HookController {
 
 	private Logger LOGGER = LoggerFactory.getLogger(HookController.class);
@@ -57,10 +57,58 @@ public class HookController {
 		}
 	}
 
-	@RequestMapping(path = "/**", method = RequestMethod.POST)
-	public ResponseEntity<?> doHook(@RequestBody String message, HttpServletRequest request) {
+	@RequestMapping(path = "/**", method = RequestMethod.GET)
+	public ResponseEntity<?> doGet(HttpServletRequest request) {
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-		LOGGER.debug("Received request at {} with message {}", path, message);
+		LOGGER.debug("GET {}", path);
+		Object response = invokeHook(path, null);
+		ResponseEntity<?> entity = new ResponseEntity<>(HttpStatus.OK);
+		if(response != null) {
+			entity = new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		return entity;
+	}
+
+	@RequestMapping(path = "/**", method = RequestMethod.POST)
+	public ResponseEntity<?> doPost(@RequestBody String message, HttpServletRequest request) {
+		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		LOGGER.info("POST {} : {}", path, message);
+		Object response = invokeHook(path, message);
+		ResponseEntity<?> entity = new ResponseEntity<>(HttpStatus.OK);
+		if(response != null) {
+			entity = new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		return entity;
+	}
+
+	@RequestMapping(path = "/**", method = RequestMethod.PUT)
+	public ResponseEntity<?> doPut(@RequestBody String message, HttpServletRequest request) {
+		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		LOGGER.info("POST {} : {}", path, message);
+		Object response = invokeHook(path, message);
+		ResponseEntity<?> entity = new ResponseEntity<>(HttpStatus.OK);
+		if(response != null) {
+			entity = new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		return entity;
+	}
+
+	@RequestMapping(path = "/**", method = RequestMethod.PATCH)
+	public ResponseEntity<?> doPatch(@RequestBody String message, HttpServletRequest request) {
+		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		LOGGER.info("POST {} : {}", path, message);
+		Object response = invokeHook(path, message);
+		ResponseEntity<?> entity = new ResponseEntity<>(HttpStatus.OK);
+		if(response != null) {
+			entity = new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		return entity;
+	}
+
+	@RequestMapping(path = "/**", method = RequestMethod.DELETE)
+	public ResponseEntity<?> doDelete(@RequestBody String message, HttpServletRequest request) {
+		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+		LOGGER.info("POST {} : {}", path, message);
 		Object response = invokeHook(path, message);
 		ResponseEntity<?> entity = new ResponseEntity<>(HttpStatus.OK);
 		if(response != null) {
