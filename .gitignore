@@ -7,3 +7,5 @@ target
 .settings/
 .vagrant
 bin
+.theia
+.vscode/
