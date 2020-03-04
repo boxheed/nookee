@@ -8,3 +8,4 @@ target
 .vagrant
 bin
 .theia
+.vscode/
