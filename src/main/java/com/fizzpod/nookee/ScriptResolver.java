@@ -97,13 +97,15 @@ public final class ScriptResolver {
         File folder = scriptPath;
         File scriptFile = null;
         while(!folder.equals(scriptRoot)) {
-            LOGGER.info("Scanning {} for script with verb {}", scriptPath, verb);
-            IOFileFilter fileFileFilter = FileFilterUtils.fileFileFilter();
-            IOFileFilter prefixFileFilter = FileFilterUtils.prefixFileFilter(verb.name());
-            File[] matchingFiles = folder.listFiles((FilenameFilter) FileFilterUtils.and(fileFileFilter, prefixFileFilter));
-            if(matchingFiles.length >= 1) {
-                scriptFile = matchingFiles[0];
-                break;
+            if(folder.exists() && folder.isDirectory()) {
+                LOGGER.info("Scanning {} for script with verb {}", scriptPath, verb);
+                IOFileFilter fileFileFilter = FileFilterUtils.fileFileFilter();
+                IOFileFilter prefixFileFilter = FileFilterUtils.prefixFileFilter(verb.name());
+                File[] matchingFiles = folder.listFiles((FilenameFilter) FileFilterUtils.and(fileFileFilter, prefixFileFilter));
+                if(matchingFiles != null && matchingFiles.length >= 1) {
+                    scriptFile = matchingFiles[0];
+                    break;
+                }
             }
             folder = folder.getParentFile();
         }
