@@ -1,13 +1,18 @@
 buildscript {
 	repositories {
-		jcenter()
+		mavenLocal()
+		mavenCentral()
+		maven {
+			url "https://artifacts.fizzpod.com/public/mvn/"
+		}
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 	dependencies {
-	    classpath "com.fizzpod:gradle-java-opinion:0.11.0"
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.5.RELEASE"
-//		classpath "io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE"
-		classpath 'com.fizzpod:gradle-pater-build-plugin:1.0.4'
-//		classpath 'com.netflix.nebula:gradle-ospackage-plugin:8.1.0'
+	    classpath "com.fizzpod:gradle-java-opinion:0.13.0"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.6.2"
+		classpath 'com.fizzpod:gradle-pater-build-plugin:2.4.0'
 	}
 }
 
@@ -22,15 +27,13 @@ description = """Net Hook Executor"""
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
-
 repositories {
      jcenter()
 }
 
 dependencyManagement {
 	imports {
-		 mavenBom 'org.springframework.boot:spring-boot-starter-parent:2.2.5.RELEASE'
+		 mavenBom 'org.springframework.boot:spring-boot-starter-parent:2.6.2'
 	}
 }
 
@@ -39,16 +42,33 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
 	implementation group: 'commons-io', name: 'commons-io', version:'2.4'
 
-	implementation 'org.jruby:jruby-complete:9.0.5.0'
-	implementation 'org.codehaus.groovy:groovy-all:2.5.9'
-	implementation 'org.python:jython:2.7.0'
+	implementation 'org.jruby:jruby-complete:9.3.2.0'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.9'
+	implementation 'org.python:jython:2.7.2'
 
-	implementation 'de.codecentric:spring-boot-admin-starter-client:1.3.2'
-	implementation 'org.jolokia:jolokia-core:1.3.3'
+	implementation 'de.codecentric:spring-boot-admin-starter-client:2.6.1'
+	implementation 'org.jolokia:jolokia-core:1.7.1'
 
 	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-	testImplementation group: 'junit', name: 'junit', version:'4.11'
-	testImplementation group: 'org.mockito', name: 'mockito-core', version:'1.9.5'
+	testImplementation group: 'junit', name: 'junit', version:'4.13.2'
+	testImplementation group: 'org.mockito', name: 'mockito-core', version:'4.2.0'
+}
+
+publish {
+    dependsOn assemble
+} 
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+      artifactId bootJar.baseName
+    }
+  }
+}
+
+bootJar {
+	launchScript()
 }
 
 /*
@@ -93,29 +113,4 @@ publishing {
 }
 */
 
-publish {
-    dependsOn assemble
-} 
 
-publishing {
-  publications {
-    bootJava(MavenPublication) {
-      artifact bootJar
-      artifactId bootJar.baseName
-    }
-  }
-}
-
-bootJar {
-	launchScript()
-}
-
-bintray {
-	dryRun = false
-	publish = true
-	publications = ['bootJava']
-	pkg {
-		labels = ['nookee', 'java']
-		repo = 'maven'
-	}
-}
