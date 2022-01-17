@@ -92,6 +92,8 @@ public final class ScriptResolver {
     /**
      * Work the way up the tree to thescript root.
      * Look for the a file starting with a matching verb.
+     * 
+     * TODO This needs to load the scripts at startup rather than when requested
      */
     private File scanForScript(final File scriptPath, final RequestMethod verb) {
         File folder = scriptPath;
@@ -108,6 +110,9 @@ public final class ScriptResolver {
                 }
             }
             folder = folder.getParentFile();
+        }
+        if(scriptFile == null) {
+            LOGGER.error("Could not find script for verb {} on path {}", verb.name(), scriptPath.getAbsolutePath());
         }
         return scriptFile;
     }

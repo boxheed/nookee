@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.HandlerMapping;
 
 @RestController
-@RequestMapping("/apis")
+@RequestMapping("/api")
 public class HookController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(HookController.class);
